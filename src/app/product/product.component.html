@@ -1,0 +1,44 @@
+<div class="container mt-4" id="container">
+    <h2 class="text-center">Create Product</h2>
+    <div class="mb-3">
+        <input 
+            [(ngModel)]="newProduct.categoryId"
+            placeholder="Product categoryId"
+            class="form-control"
+            required
+        />
+        <input 
+            [(ngModel)]="newProduct.name"
+            placeholder="Product name"
+            class="form-control"
+            required
+        />
+        <input 
+            [(ngModel)]="newProduct.price"
+            placeholder="Product price"
+            class="form-control"
+            required
+        />
+        <input 
+            [(ngModel)]="newProduct.quantity"
+            placeholder="Product quantity"
+            class="form-control"
+            required
+        />
+    </div>
+<button id="btnCreate" (click)="createProduct()" class="btn btn-primary">Create Product</button>
+</div>
+
+<h2 class="mt-4 text-center">Available Proucts</h2>
+<div>
+    <div *ngFor="let product of products" class="border rounded p3 mb-3">
+        <div class="option-list"> 
+            <h3>categoryId: {{product.categoryId}}</h3>
+            <h3>name: {{product.name}}</h3>
+            <h3>price: {{product.price}}</h3>
+            <h3>quantity: {{product.quantity}}</h3>
+            <button (click)="removeProduct(product.id)" class="btn btn-danger">Remove product</button>
+            <button (click)="prepareBeforeUpdate(product)" class="btn btn-success">update product</button>
+        </div>
+    </div>
+</div>
