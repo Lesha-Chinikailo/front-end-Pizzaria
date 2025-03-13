@@ -1,0 +1,61 @@
+<div class="container mt-4" id="container">
+    <h2 class="text-center">Create Order</h2>
+    <div>
+        <div *ngFor="let item of newOrder.orderItems; let i = index">
+            <div style="display: flex; align-items: center;">
+                <h5>productId: </h5>
+                <input 
+                [(ngModel)]="item.productId"
+                placeholder="productId"
+                class="form-control"
+                required
+                style="margin-left: 10px;"
+                />
+            </div>
+
+            <div style="display: flex; align-items: center;">
+                <h5>quantity: </h5>
+                <input 
+                [(ngModel)]="item.quantity"
+                placeholder="quantity"
+                class="form-control"
+                required
+                />
+            </div>
+
+            <button
+            (click)="addQuantityItem(i)"
+            class="btn btn-success">+ quantity</button>
+            <button
+            (click)="minusQuantityItem(i)"
+            class="btn btn-success">- quantity</button>
+            <button *ngIf="newOrder.orderItems.length > 1" 
+                (click)="newOrder.orderItems.splice(i, 1)"
+                class="btn btn-danger">
+                Remove Product
+            </button>
+        </div>
+    </div>
+    <div style="display: flex; justify-content: space-between;">
+        <button id="btnAddItemInOrder" (click)="addItemInOrder()" class="btn btn-primary">add Item</button>
+        <button id="btnCreate" (click)="createProduct()" class="btn btn-primary">Create Product</button>
+    </div>
+<!-- <button id="btnAddItemInOrder" (click)="addItemInOrder()" class="btn btn-primary">add Item</button>
+<button id="btnCreate" (click)="createProduct()" class="btn btn-primary">Create Product</button> -->
+</div>
+
+
+<h2 class="mt-4 text-center">Orders</h2>
+<div class="polls-list">
+    <div *ngFor="let order of orders" class="border rounded p3 mb-3">
+        <h3>username: {{order.username}}</h3>
+        <h3>isPaid: {{order.isPaid}}</h3>
+        <div class="option-list">
+            <div *ngFor="let item of order.orderItems; let i = index">
+                <h4>- product id: {{item.productId}}</h4>
+                <h4>  count: {{item.quantity}}</h4>
+            </div>
+            <button (click)="removeOrder(order.id)" class="btn btn-danger">Remove Order</button>
+        </div>
+    </div>
+</div>

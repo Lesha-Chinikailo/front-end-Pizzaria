@@ -59,6 +59,8 @@ export class ProductComponent implements OnInit {
 
   removeProduct(id: number){
     this.productService.deleteProduct(id);
+    const index = this.products.findIndex(p => p.id == id);
+    this.products.splice(index, 1);
   }
 
   prepareBeforeUpdate(product: Product){
