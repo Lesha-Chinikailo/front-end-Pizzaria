@@ -44,7 +44,7 @@ export class OrderComponent implements OnInit{
   createProduct(){
     this.orderService.createOrder(this.newOrder).subscribe({
       next: (createOrder) =>{
-
+        console.log(createOrder);
         
         this.orders.push(createOrder);
         this.resetOrder()

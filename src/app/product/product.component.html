@@ -26,6 +26,9 @@
             required
         />
     </div>
+    <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
 <button id="btnCreate" (click)="createProduct()" class="btn btn-primary">Create Product</button>
 </div>
 

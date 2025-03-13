@@ -3,15 +3,19 @@ import { ProductService } from '../product.service';
 import {Product} from '../product.models'
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TokenInterceptor } from '../token.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-product',
   imports: [CommonModule, FormsModule],
   templateUrl: './product.component.html',
-  styleUrl: './product.component.css'
+  styleUrl: './product.component.css',
 })
 export class ProductComponent implements OnInit {
 
+  errorMessage: string = '';
   newProduct: Product = {
     id: 0,
     categoryId: undefined,
@@ -38,7 +42,9 @@ export class ProductComponent implements OnInit {
         this.products = data
       },
       error: (error)=>{
-        console.log("Error fetching error: ", error);
+        const map = new Map(error.error);
+        console.log("Error fetching error: ", JSON.stringify(map));
+        console.log("Error 1: ", error.HttpErroResponse)
       }
     })
   }
@@ -51,6 +57,9 @@ export class ProductComponent implements OnInit {
       },
       error: (error) =>{
         console.log("Error fetching error: ", error);
+        this.errorMessage = error;
+        console.log("Error 1: ", error.error);
+        alert(error.error)
       }
     }
     );

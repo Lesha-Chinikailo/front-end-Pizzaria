@@ -1,0 +1,24 @@
+<div class="container mt-4" id="container">
+    <h2 class="text-center">Login</h2>
+    <div class="mb-3">
+        <input 
+            [(ngModel)]="user.username"
+            placeholder="username"
+            class="form-control"
+            required
+        />
+        <input 
+            [(ngModel)]="user.password"
+            placeholder="password"
+            class="form-control"
+            required
+        />
+    </div>
+<button id="btnLogin" (click)="login()" class="btn btn-primary">login</button>
+<!-- <button id="btnLogout" (click)="logout()" class="btn btn-primary">logout</button> -->
+<div><p></p>
+    <button id="btnToRegister" (click)="redirectToRegister()" class="btn btn-secondary">Don't have an account</button>
+
+</div>
+<!-- <button id="btnToRegister" (click)="redirectToRegister()" class="btn btn-primary">Don't have an account</button> -->
+</div>
