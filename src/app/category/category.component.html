@@ -1,0 +1,23 @@
+<div class="container mt-4" id="container">
+    <h2 class="text-center">Create category</h2>
+    <div class="mb-3">
+        <input 
+            [(ngModel)]="newCategory.name"
+            placeholder="category name"
+            class="form-control"
+            required
+        />
+    </div>
+<button id="btnCreate" (click)="createCategory()" class="btn btn-primary">Create Category</button>
+</div>
+
+<h2 class="mt-4 text-center">Available Categories</h2>
+<div>
+    <div *ngFor="let category of categories" class="border rounded p3 mb-3">
+        <div class="option-list"> 
+            <h3>name: {{category.name}}</h3>
+            <button (click)="removeCategory(category.id)" class="btn btn-danger">Remove category</button>
+            <button (click)="prepareBeforeUpdate(category)" class="btn btn-success">Update category</button>
+        </div>
+    </div>
+</div>
