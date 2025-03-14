@@ -3,6 +3,7 @@ import { OrderService } from '../order.service';
 import { Order } from '../order.models';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { buffer } from 'rxjs';
 
 @Component({
   selector: 'app-order',
@@ -36,9 +37,28 @@ export class OrderComponent implements OnInit{
         this.orders = data
       },
       error: (error)=>{
-        console.log("Error fetching error: ", error);
+        console.log("Error fetching error loadOrders: ", error);
       }
     })
+  }
+
+  payOrder(orderId : number){
+    this.orderService.payOrder(orderId).subscribe({
+      next: (orderId) =>{
+        console.log("order is paid: ",  orderId.orderId);
+        const index = this.orders.findIndex(o => o.id == orderId.orderId);
+        this.orders[index].isPaid = true;
+        const button: HTMLButtonElement | null = document.getElementById('btnPay' + orderId.orderId) as HTMLButtonElement;
+        if (button) {
+          button.disabled = false;
+        }
+
+      },
+      error: (error) =>{
+        console.log("Error fetching error payOrder: ", error);
+      }
+    }
+    );
   }
 
   createProduct(){
@@ -50,7 +70,7 @@ export class OrderComponent implements OnInit{
         this.resetOrder()
       },
       error: (error) =>{
-        console.log("Error fetching error: ", error);
+        console.log("Error fetching error createProduct: ", error);
       }
     }
     );

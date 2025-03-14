@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TokenDto, UserLogin, UserRegister } from './user.models';
 import { Observable } from 'rxjs';
@@ -20,7 +20,13 @@ export class AuthService {
     return this.http.post<TokenDto>(this.baseUrl + "/login", user);
   }
 
-  validate(token : string | null){
-    this.http.get(this.baseUrl + "/validate");
+  validate(token : string | null) : Observable<any>{
+    if(token !== null){
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+      return this.http.get(this.baseUrl + "/validate", {headers});
+    }
+    return this.http.get(this.baseUrl + "/validate");
   }
 }

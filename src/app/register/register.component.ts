@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { UserRegister } from '../user.models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -18,13 +19,14 @@ export class RegisterComponent {
     role: ''
   }
 
-  constructor(private authService: AuthService){}
+  constructor(private authService: AuthService, private router:Router){}
 
   register(){
     this.authService.register(this.newUser).subscribe({
       next: (userRegister) =>{
         console.log("regiter successfully" + userRegister.username);
         this.resetUser();
+        this.router.navigate(['/'])
       },
       error: (error) =>{
         console.log('error user register: ', error)

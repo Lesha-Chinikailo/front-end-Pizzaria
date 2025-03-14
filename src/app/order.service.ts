@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Order } from './order.models';
+import { Order, OrderId } from './order.models';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +25,9 @@ export class OrderService {
 
   deleteOrder(orderId : number): void{
     this.http.delete<void>(this.baseUrl + '/' + orderId).subscribe();
+  }
+
+  payOrder(orderId : number): Observable<OrderId>{
+    return this.http.patch<OrderId>(this.baseUrl + "/pay/" + orderId, {})
   }
 }

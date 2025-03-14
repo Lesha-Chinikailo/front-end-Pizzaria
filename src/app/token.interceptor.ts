@@ -3,6 +3,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpHandlerFn, Ht
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { routes } from './app.routes';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class TokenInterceptor {
@@ -26,7 +27,7 @@ export class TokenInterceptor {
 }
 
 
-export function tokenIntercept(req: HttpRequest<any>, next: HttpHandlerFn, router:Router): Observable<HttpEvent<unknown>> {
+export function tokenIntercept(req: HttpRequest<any>, next: HttpHandlerFn, router:Router, authService:AuthService): Observable<HttpEvent<unknown>> {
     const token = sessionStorage.getItem("Authorization");
     if (token) {
       const cloned = req.clone({
@@ -39,22 +40,26 @@ export function tokenIntercept(req: HttpRequest<any>, next: HttpHandlerFn, route
     return next(req);
 }
 
-// export function tokenInterceptor(router: Router) {
-//     return (req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
-//       const token = sessionStorage.getItem("Authorization");
-//       console.log("Authorization: ", token);
-//       if (token) {
+// export function tokenIntercept(req: HttpRequest<any>, next: HttpHandlerFn, router:Router, authService:AuthService): Observable<HttpEvent<unknown>> {
+//   const token = sessionStorage.getItem("Authorization");
+//   if (token) {
+//     console.log("token: ", token);
+    
+//     authService.validate(token).subscribe({
+//       next: () => {
 //         const cloned = req.clone({
 //           headers: req.headers.set('Authorization', `Bearer ${token}`)
 //         });
-//         console.log("yes Authorization");
-  
+    
+//         console.log("cloned: ", cloned);
 //         return next(cloned);
-//       } else {
-//         console.log("no Authorization");
-//         router.navigate(['/login']);
+//       },
+//       error: (error) => {
+//         console.log("cloned: ", error);
+//         router.navigate(['/login'])
+//         return next(req);
 //       }
-  
-//       return next(req);
-//     };
+//     })
 //   }
+//   return next(req);
+// }

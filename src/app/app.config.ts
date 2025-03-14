@@ -7,5 +7,5 @@ import { tokenIntercept, TokenInterceptor } from './token.interceptor';
 import { AuthService } from './auth.service';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideHttpClient(withInterceptors([(req, next) => tokenIntercept(req, next, inject(Router))])), provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes)]
+  providers: [provideHttpClient(withInterceptors([(req, next) => tokenIntercept(req, next, inject(Router), inject(AuthService))])), provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes)]
 };

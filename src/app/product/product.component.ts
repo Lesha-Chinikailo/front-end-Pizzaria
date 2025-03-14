@@ -42,8 +42,7 @@ export class ProductComponent implements OnInit {
         this.products = data
       },
       error: (error)=>{
-        const map = new Map(error.error);
-        console.log("Error fetching error: ", JSON.stringify(map));
+        console.log("Error fetching error loadProducts: ", error);
         console.log("Error 1: ", error.HttpErroResponse)
       }
     })
@@ -56,10 +55,12 @@ export class ProductComponent implements OnInit {
         this.resetProduct()
       },
       error: (error) =>{
-        console.log("Error fetching error: ", error);
-        this.errorMessage = error;
-        console.log("Error 1: ", error.error);
-        alert(error.error)
+        console.log("Error fetching error createProduct: ", error);
+        // this.errorMessage = error.error;
+        // console.log("Error 1: ", error.error);
+        // alert(error.error)
+        this.resetProduct();
+        this.loadProducts();
       }
     }
     );
@@ -70,6 +71,10 @@ export class ProductComponent implements OnInit {
     this.productService.deleteProduct(id);
     const index = this.products.findIndex(p => p.id == id);
     this.products.splice(index, 1);
+    setTimeout(() => {
+      this.loadProducts();
+    }, 500); 
+    // this.loadProducts();
   }
 
   prepareBeforeUpdate(product: Product){
@@ -108,7 +113,8 @@ export class ProductComponent implements OnInit {
         }
       },
       error: (error) =>{
-        console.log("Error fetching error: ", error);
+        console.log("Error fetching error updateProduct: ", error);
+        this.loadProducts();
       }
     }
     );;

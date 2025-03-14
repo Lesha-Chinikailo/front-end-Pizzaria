@@ -10,3 +10,7 @@ export interface Order {
     isPaid: boolean,
     orderItems: OrderItem[];
 }
+
+export interface OrderId {
+    orderId: number,
+}
