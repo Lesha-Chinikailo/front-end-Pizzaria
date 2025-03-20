@@ -29,7 +29,8 @@ export class LoginComponent {
         },
         error: (error) =>{
           console.log('error user login: ', error)
-          alert(JSON.stringify(error))//неверный логин или пароль. bad credential
+          // alert(JSON.stringify(error))//неверный логин или пароль. bad credential
+          alert("Неверный логин или пароль")
         }
       });
     }

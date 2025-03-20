@@ -1,7 +1,12 @@
-<!-- <app-product></app-product> -->
- <!-- <app-order></app-order> -->
- <!-- <app-root></app-root> -->
-<div style="text-align: right;">
-    <button id="btnLogout" (click)="logout()" class="btn btn-primary">logout</button>
+ <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; gap: 10px;">
+        <button id="btnToProducts" (click)="toProducts()" class="btn btn-primary">Products</button>
+        <button id="btnToCategories" (click)="toCategories()" class="btn btn-primary">Categories</button>
+        <button id="btnToOrders" (click)="toOrders()" class="btn btn-primary">Orders</button>
+        <p style="  margin: 10px 0;
+        padding: 5px;" *ngIf="getusername() !== null">user is not authorized</p>
+    </div>
+    <button id="btnLogout" (click)="logout()" class="btn btn-primary">Logout</button>
 </div>
+
 <router-outlet />
