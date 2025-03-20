@@ -4,13 +4,6 @@
         <div *ngFor="let item of newOrder.orderItems; let i = index">
             <div style="display: flex; align-items: center;">
                 <h5>productId: </h5>
-                <!-- <input 
-                [(ngModel)]="item.productId"
-                placeholder="productId"
-                class="form-control"
-                required
-                style="margin-left: 10px;"
-                /> -->
                 <select 
                     [(ngModel)]="item.productId" 
                     class="form-control" 
@@ -57,12 +50,7 @@
         <div id="container" style="display: flex; gap: 10px;">
             <button id="btnCreate" (click)="createOrder()" class="btn btn-primary">Create Order</button>
         </div>
-        <!-- <button id="btnCreate" (click)="createOrder()" class="btn btn-primary">Create Order</button> -->
     </div>
-    <!-- <div style="display: flex; justify-content: space-between;">
-        <button id="btnAddItemInOrder" (click)="addItemInOrder()" class="btn btn-primary">add Item</button>
-        <button id="btnCreate" (click)="createOrder()" class="btn btn-primary">Create Order</button>
-    </div> -->
 </div>
 
 
@@ -73,7 +61,7 @@
         <h3>isPaid: {{order.isPaid}}</h3>
         <div class="option-list">
             <div *ngFor="let item of order.orderItems; let i = index">
-                <h4>- product id: {{item.productId}}</h4>
+                <h4>- product: {{getProductNameById(item.productId)}}</h4>
                 <h4>  count: {{item.quantity}}</h4>
             </div>
             <button (click)="removeOrder(order.id)" class="btn btn-danger">Remove Order</button>

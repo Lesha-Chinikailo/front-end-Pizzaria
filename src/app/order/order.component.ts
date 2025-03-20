@@ -58,9 +58,6 @@ export class OrderComponent implements OnInit{
     if(productId === 0){
       return true;
     }
-    // const product = this.availableProducts.find(product => product.id === productId);
-    // console.log("producd isAvailable: ", product?.isAvailable);
-    // return product?.isAvailable ?? false;
     if (!this.availableProducts) {
         console.warn('availableProducts not initialized');
         return false;
@@ -72,15 +69,9 @@ export class OrderComponent implements OnInit{
     return false;
   }
 
-  getFilteredProducts(): Product[] {
-    // Возвращаем только те продукты, которые не выбраны или совпадают с текущим значением
-
-    // const selectedProductIds : number[] = this.newOrder.orderItems.map(item => +item.productId);
-    // console.log("select", selectedProductIds);
-    
-    return this.availableProducts.filter(
-      product => product.isAvailable
-    );
+  getProductNameById(id: number) : string{
+    const index = this.availableProducts.findIndex(p => p.id == id);
+    return this.availableProducts[index].name ?? "unknown";
   }
 
   ngOnInit(): void {    
@@ -101,13 +92,6 @@ export class OrderComponent implements OnInit{
       }
     })
   }
-
-
-  // isProductAvailable(productId : number) : boolean{
-  //   console.log("has: ", this.availableProducts.has(productId));
-    
-  //   return this.availableProducts.has(productId);
-  // }
 
   fetchProductAvailability() {
     this.productService.getProducts().subscribe({
@@ -142,21 +126,6 @@ export class OrderComponent implements OnInit{
     );
   }
 
-  // getNameProductByProductId(productId : number) : string{
-  //    this.productService.getProductById(productId).subscribe({
-  //     next: (product) =>{
-  //       console.log(product.name);
-  //       if (product.name !== null && product.name !== undefined) {
-  //          product.name;
-  //       }
-  //     },
-  //     error: (error) => {
-  //       console.log("Error fetching error prepareBeforeUpdate: ", error);
-  //       return "";
-  //     }
-  //   })
-  // }
-
   getNameProductByProductId(productId: number): Observable<string> {
     return this.productService.getProductById(productId).pipe(
         map(product => product.name || ""), // Fallback to empty string if name is null/undefined
@@ -165,8 +134,7 @@ export class OrderComponent implements OnInit{
             return of(""); // Return an empty Observable with an empty string
         })
     );
-}
-
+  }
 
   createOrder(){
     if(!this.isCorrectOrder()){
@@ -219,23 +187,6 @@ export class OrderComponent implements OnInit{
 
   prepareBeforeUpdate(order: Order){
     this.newOrder = order;
-    // for (let item of order.orderItems) {
-    //   console.log("is: ", !this.availableProducts.some(p => p.id === item.productId));
-      
-    //   if(!this.availableProducts.some(p => p.id === item.productId)){
-    //     const select = document.getElementById('select' + item.id);
-        
-    //     if(select){
-    //       console.log("something");
-    //       this.getNameProductByProductId(item.productId).subscribe(name => {
-    //         console.log(name);
-            
-    //         select.textContent = name; // Assign the resolved value to textContent
-    //     });
-    //     }
-    //   }
-    // }
-
     const container = document.getElementById('container');
     if(!document.getElementById('btnUpdate')){
       const newButton = document.createElement('button');
@@ -285,10 +236,10 @@ export class OrderComponent implements OnInit{
     var items = this.newOrder.orderItems;
     for (var item of items) {
       if(item.productId == null || item.productId <= 0){
-        this.errorMessage += "invalid productId\n";
+        this.errorMessage += "invalid product\n";
       }
       if(item.quantity == null || item.quantity <= 0){
-        this.errorMessage += "invalid quantity\n";
+        this.errorMessage += "invalid quantity with product: " + this.getProductNameById(item.productId) + "\n";
       }
     }
     if(this.errorMessage == ''){
