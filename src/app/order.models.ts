@@ -1,5 +1,5 @@
 export interface OrderItem{
-    id: number, 
+    id?: number, 
     productId: number,
     quantity: number
 }

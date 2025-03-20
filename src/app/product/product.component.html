@@ -26,9 +26,6 @@
             required
         />
     </div>
-    <div *ngIf="errorMessage" class="error-message">
-        {{ errorMessage }}
-      </div>
 <button id="btnCreate" (click)="createProduct()" class="btn btn-primary">Create Product</button>
 </div>
 
@@ -40,8 +37,9 @@
             <h3>name: {{product.name}}</h3>
             <h3>price: {{product.price}}</h3>
             <h3>quantity: {{product.quantity}}</h3>
+            <h3>available: {{product.isAvailable}}</h3>
             <button (click)="removeProduct(product.id)" class="btn btn-danger">Remove product</button>
-            <button (click)="prepareBeforeUpdate(product)" class="btn btn-success">update product</button>
+            <button *ngIf="product.isAvailable" (click)="prepareBeforeUpdate(product)" class="btn btn-success">update product</button>
         </div>
     </div>
 </div>

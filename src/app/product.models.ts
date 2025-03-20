@@ -5,5 +5,5 @@ export interface Product {
     price?: number,
     quantity?: number
     dateTimeOfManufacture?: Date,
-    isAvailable?: Boolean
+    isAvailable: boolean
 }

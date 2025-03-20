@@ -1,21 +1,35 @@
-<div class="container mt-4" id="container">
+<div class="container mt-4">
     <h2 class="text-center">Create Order</h2>
     <div>
         <div *ngFor="let item of newOrder.orderItems; let i = index">
             <div style="display: flex; align-items: center;">
                 <h5>productId: </h5>
-                <input 
+                <!-- <input 
                 [(ngModel)]="item.productId"
                 placeholder="productId"
                 class="form-control"
                 required
                 style="margin-left: 10px;"
-                />
+                /> -->
+                <select 
+                    [(ngModel)]="item.productId" 
+                    class="form-control" 
+                    required
+                    id="select{{item.id}}"
+                    [disabled]="!isProductAvailableFromList(item.productId)"
+                    style="margin-left: 10px;">
+                    <option *ngFor="let product of availableProducts" [value]="product.id"
+                    [disabled]="!isProductAvailableFromList(product.id)"
+                    >
+                        {{ product.name }}
+                    </option>
+                </select>
             </div>
 
             <div style="display: flex; align-items: center;">
                 <h5>quantity: </h5>
                 <input 
+                [disabled]="!isProductAvailableFromList(item.productId)"
                 [(ngModel)]="item.quantity"
                 placeholder="quantity"
                 class="form-control"
@@ -23,10 +37,10 @@
                 />
             </div>
 
-            <button
+            <button [disabled]="!isProductAvailableFromList(item.productId)"
             (click)="addQuantityItem(i)"
             class="btn btn-success">+ quantity</button>
-            <button
+            <button [disabled]="!isProductAvailable(item.productId)"
             (click)="minusQuantityItem(i)"
             class="btn btn-success">- quantity</button>
             <button *ngIf="newOrder.orderItems.length > 1" 
@@ -36,12 +50,19 @@
             </button>
         </div>
     </div>
-    <div style="display: flex; justify-content: space-between;">
-        <button id="btnAddItemInOrder" (click)="addItemInOrder()" class="btn btn-primary">add Item</button>
-        <button id="btnCreate" (click)="createProduct()" class="btn btn-primary">Create Product</button>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 10px;">
+            <button id="btnAddItemInOrder" (click)="addItemInOrder()" class="btn btn-primary">add Item</button>
+        </div>
+        <div id="container" style="display: flex; gap: 10px;">
+            <button id="btnCreate" (click)="createOrder()" class="btn btn-primary">Create Order</button>
+        </div>
+        <!-- <button id="btnCreate" (click)="createOrder()" class="btn btn-primary">Create Order</button> -->
     </div>
-<!-- <button id="btnAddItemInOrder" (click)="addItemInOrder()" class="btn btn-primary">add Item</button>
-<button id="btnCreate" (click)="createProduct()" class="btn btn-primary">Create Product</button> -->
+    <!-- <div style="display: flex; justify-content: space-between;">
+        <button id="btnAddItemInOrder" (click)="addItemInOrder()" class="btn btn-primary">add Item</button>
+        <button id="btnCreate" (click)="createOrder()" class="btn btn-primary">Create Order</button>
+    </div> -->
 </div>
 
 
@@ -56,7 +77,8 @@
                 <h4>  count: {{item.quantity}}</h4>
             </div>
             <button (click)="removeOrder(order.id)" class="btn btn-danger">Remove Order</button>
-            <button id="btnPay{{order.id}}" (click)="payOrder(order.id)" class="btn btn-success">Pay Order</button>
+            <button *ngIf="order.isPaid == false" id="btnPay{{order.id}}" (click)="payOrder(order.id)" class="btn btn-success">Pay Order</button>
+            <button *ngIf="order.isPaid == false" (click)="prepareBeforeUpdate(order)" class="btn btn-success">update product</button>
         </div>
     </div>
 </div>

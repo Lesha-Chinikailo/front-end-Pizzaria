@@ -30,4 +30,8 @@ export class OrderService {
   payOrder(orderId : number): Observable<OrderId>{
     return this.http.patch<OrderId>(this.baseUrl + "/pay/" + orderId, {})
   }
+
+  updateProduct(id : number, order : Order): Observable<Order>{
+    return this.http.put<Order>(this.baseUrl + '/' + id, order);
+  }
 }

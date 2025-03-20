@@ -49,6 +49,10 @@ export class ProductComponent implements OnInit {
   }
 
   createProduct(){
+    if(!this.isCorrectProduct()){
+      alert(this.errorMessage)
+      return;
+    }
     this.productService.createProduct(this.newProduct).subscribe({
       next: (createProduct) =>{
         this.products.push(createProduct);
@@ -74,7 +78,6 @@ export class ProductComponent implements OnInit {
     setTimeout(() => {
       this.loadProducts();
     }, 500); 
-    // this.loadProducts();
   }
 
   prepareBeforeUpdate(product: Product){
@@ -105,6 +108,10 @@ export class ProductComponent implements OnInit {
   }
 
   updateProduct(){
+    if(!this.isCorrectProduct()){
+      alert("incorrect values")
+      return;
+    }
     this.productService.updateProduct(this.newProduct.id, this.newProduct).subscribe({
       next: (updateProduct) =>{
         const index = this.products.findIndex(t => t.id === updateProduct.id);
@@ -135,5 +142,29 @@ export class ProductComponent implements OnInit {
       dateTimeOfManufacture: undefined,
       isAvailable: true
     }
+  }
+
+  isCorrectProduct() : Boolean{
+    this.errorMessage = '';
+    if(this.newProduct.categoryId == null || this.newProduct.categoryId <= 0){
+      this.errorMessage += "invalid categoryId\n";
+      // return false;
+    }
+    if(this.newProduct.name == null || this.newProduct.name == ''){
+      this.errorMessage += "invalid name\n";
+      // return false;
+    }
+    if(this.newProduct.price == null || this.newProduct.price <= 0){
+      this.errorMessage += "invalid price\n";
+      // return false;
+    }
+    if(this.newProduct.quantity == null || this.newProduct.quantity <= 0){
+      this.errorMessage += "invalid quantity\n";
+      // return false;
+    }
+    if(this.errorMessage == ''){
+      return true;
+    }
+    return false;
   }
 }
