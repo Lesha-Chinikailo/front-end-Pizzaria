@@ -116,5 +116,10 @@ export class CategoryComponent implements OnInit {
         id: 0,
         name: ''
       }
+      const button: HTMLButtonElement | null = document.getElementById('btnCreate') as HTMLButtonElement;
+      if (button) {
+        button.disabled = false;
+      }
+      this.removeUpdateButtonIfExists();
     }
 }

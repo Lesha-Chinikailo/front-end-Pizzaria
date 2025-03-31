@@ -1,6 +1,6 @@
 export interface Product {
     id: number
-    categoryId?: number,
+    categoryId: number,
     name?: string,
     price?: number,
     quantity?: number

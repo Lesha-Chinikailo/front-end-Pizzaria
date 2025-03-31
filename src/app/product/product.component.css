@@ -1,0 +1,9 @@
+select,
+input {
+    vertical-align: middle; /* Выравнивание по вертикали */
+    height: 40px; /* Унификация высоты */
+    padding: 5px;
+    margin: 0;
+    font-size: 16px;
+    box-sizing: border-box;
+}

@@ -3,7 +3,6 @@ import { OrderService } from '../order.service';
 import { Order, OrderItem } from '../order.models';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { buffer, catchError, map, Observable, of } from 'rxjs';
 import { ProductService } from '../product.service';
 import { Product } from '../product.models';
 
@@ -29,32 +28,17 @@ export class OrderComponent implements OnInit{
   availableProducts: Product[] = [];
   constructor(private orderService: OrderService, private productService: ProductService){}
 
-
-  // selectedValues: number[] = []; // Массив выбранных значений
-
   isProductAvailableFromList(productId : number) : boolean{
     if(productId === 0){
       return true;
     }
-    // console.log("availableProducts: ", this.availableProducts);
     
     const product = this.availableProducts.find(product => +product.id === +productId);
-    
-    // if(productId === 3){
-    //   console.log("productId isProductAvailableFromList: ", productId);
-    //   console.log("isAvailable isProductAvailableFromList: ", product?.isAvailable);
-    //   console.log("isAvailable result: ", product?.isAvailable ?? false);
-    // }
-    // console.log("product: ", product);
-    
 
     return product?.isAvailable ?? false;
   }
 
-  //used for quantity
   isProductAvailable(productId: number): boolean {
-    // console.log("productId: ", productId);
-    
     if(productId === 0){
       return true;
     }
@@ -79,9 +63,7 @@ export class OrderComponent implements OnInit{
     this.fetchProductAvailability();
   }
 
-  loadOrders(){
-    console.log("load Orders");
-    
+  loadOrders(){    
     this.orderService.getOrders().subscribe({
       next: (data) => {
         console.log(data);
@@ -96,9 +78,6 @@ export class OrderComponent implements OnInit{
   fetchProductAvailability() {
     this.productService.getProducts().subscribe({
       next: (products) => {
-        console.log("products: ", products.map(i => i.id));
-        
-        // this.availableProducts = new Set(products.map(product => product.id));
         this.availableProducts = products;
       },
       error: (error) => {
@@ -110,7 +89,6 @@ export class OrderComponent implements OnInit{
   payOrder(orderId : number){
     this.orderService.payOrder(orderId).subscribe({
       next: (orderId) =>{
-        console.log("order is paid: ",  orderId.orderId);
         const index = this.orders.findIndex(o => o.id == orderId.orderId);
         this.orders[index].isPaid = true;
         const button: HTMLButtonElement | null = document.getElementById('btnPay' + orderId.orderId) as HTMLButtonElement;
@@ -126,25 +104,13 @@ export class OrderComponent implements OnInit{
     );
   }
 
-  getNameProductByProductId(productId: number): Observable<string> {
-    return this.productService.getProductById(productId).pipe(
-        map(product => product.name || ""), // Fallback to empty string if name is null/undefined
-        catchError(error => {
-            console.error("Error fetching product name:", error);
-            return of(""); // Return an empty Observable with an empty string
-        })
-    );
-  }
-
   createOrder(){
     if(!this.isCorrectOrder()){
       alert(this.errorMessage)
       return;
     }
     this.orderService.createOrder(this.newOrder).subscribe({
-      next: (createOrder) =>{
-        console.log(createOrder);
-        
+      next: (createOrder) =>{        
         this.orders.push(createOrder);
         this.resetOrder()
       },
@@ -170,6 +136,15 @@ export class OrderComponent implements OnInit{
         {id: 0, productId: 0, quantity: 0},
       ]
     }
+    const button: HTMLButtonElement | null = document.getElementById('btnCreate') as HTMLButtonElement;
+    if (button) {
+      button.disabled = false;
+    }
+    this.removeUpdateButtonIfExists()
+  }
+  removeUpdateButtonIfExists(){
+    const button = document.getElementById('btnUpdate');
+    button?.remove();
   }
 
   addItemInOrder(){
@@ -180,7 +155,7 @@ export class OrderComponent implements OnInit{
   }
 
   minusQuantityItem(indexBy : number){
-    if(this.newOrder.orderItems[indexBy].quantity > 0){
+    if(this.newOrder.orderItems[indexBy].quantity > 1){
       this.newOrder.orderItems[indexBy].quantity--;
     }
   }
@@ -213,7 +188,7 @@ export class OrderComponent implements OnInit{
 
   updateOrder(){
     if(!this.isCorrectOrder()){
-      alert("incorrect values")
+      alert(this.errorMessage)
       return;
     }
     this.orderService.updateProduct(this.newOrder.id, this.newOrder).subscribe({
@@ -236,8 +211,10 @@ export class OrderComponent implements OnInit{
     var items = this.newOrder.orderItems;
     for (var item of items) {
       if(item.productId == null || item.productId <= 0){
-        this.errorMessage += "invalid product\n";
+        this.errorMessage += "invalid name product\n";
+        return false;
       }
+
       if(item.quantity == null || item.quantity <= 0){
         this.errorMessage += "invalid quantity with product: " + this.getProductNameById(item.productId) + "\n";
       }

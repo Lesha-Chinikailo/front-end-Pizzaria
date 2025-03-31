@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { TokenInterceptor } from '../token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthService } from '../auth.service';
+import { CategoryService } from '../category.service';
+import { Category } from '../category.models';
 
 @Component({
   selector: 'app-product',
@@ -18,7 +20,7 @@ export class ProductComponent implements OnInit {
   errorMessage: string = '';
   newProduct: Product = {
     id: 0,
-    categoryId: undefined,
+    categoryId: 0,
     name: '',
     price: undefined,
     quantity: undefined,
@@ -26,13 +28,40 @@ export class ProductComponent implements OnInit {
     isAvailable: true
   }
   products: Product[] = [];
+  categories: Category[] = [];
 
-  constructor(private productService: ProductService){
-
-  }
+  constructor(private productService: ProductService, private categoryService: CategoryService){}
 
   ngOnInit(): void {
     this.loadProducts();
+    this.loadCategories()
+  }
+
+  getCategoryNameById(id: number) : string{
+    const index = this.categories.findIndex(c => c.id == id);
+    return this.categories[index].name ?? "unknown";
+  }
+
+  isAvailableCategory(categoryId: number): boolean {
+    if(categoryId === 0){
+      return true;
+    }
+    const index = this.categories.findIndex(item => +item.id == +categoryId);
+    if(index !== -1){
+      return true;
+    }
+    return false;
+  }
+
+  loadCategories() {
+    this.categoryService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (error) => {
+        console.error('Error fetching products fetchProductAvailability:', error);
+      }
+    });
   }
 
   loadProducts(){
@@ -132,13 +161,18 @@ export class ProductComponent implements OnInit {
   resetProduct(){
     this.newProduct = {
       id: 0,
-      categoryId: undefined,
+      categoryId: 0,
       name: '',
       price: undefined,
       quantity: undefined,
       dateTimeOfManufacture: undefined,
       isAvailable: true
     }
+    const button: HTMLButtonElement | null = document.getElementById('btnCreate') as HTMLButtonElement;
+    if (button) {
+      button.disabled = false;
+    }
+    this.removeUpdateButtonIfExists()
   }
 
   isCorrectProduct() : Boolean{

@@ -1,12 +1,17 @@
-<div class="container mt-4" id="container">
+<div class="container mt-4">
     <h2 class="text-center">Create Product</h2>
     <div class="mb-3">
-        <input 
-            [(ngModel)]="newProduct.categoryId"
-            placeholder="Product categoryId"
-            class="form-control"
+        <select 
+            [(ngModel)]="newProduct.categoryId" 
+            class="form-control" 
             required
-        />
+            [disabled]="!isAvailableCategory(newProduct.categoryId)"
+            style="margin-left: 10px;">
+            <option value="" disabled selected hidden>enter</option>
+            <option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+            </option>
+        </select>
         <input 
             [(ngModel)]="newProduct.name"
             placeholder="Product name"
@@ -26,7 +31,15 @@
             required
         />
     </div>
-<button id="btnCreate" (click)="createProduct()" class="btn btn-primary">Create Product</button>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 10px;">
+            <button id="btnCreate" (click)="createProduct()" class="btn btn-primary">Create Product</button>
+        </div>
+        <div id="container" style="display: flex; gap: 10px;">
+            <button id="btnClear" (click)="resetProduct()" class="btn btn-primary">Clear</button>
+        </div>
+    </div>
+
 </div>
 
 <h2 class="mt-4 text-center">Available Proucts</h2>
